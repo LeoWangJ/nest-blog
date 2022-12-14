@@ -3,7 +3,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
-import { DBEnum } from 'src/enum/config.enum';
+import { ConfigEnum } from './src/enum/config.enum';
 
 export function getEnv(env: string): Record<string, unknown> {
   if (fs.existsSync(env)) {
@@ -26,14 +26,13 @@ export function buildConnectionOptions() {
     process.env.NODE_ENV === 'test'
       ? [__dirname + '/**/*.entity.ts']
       : [__dirname + '/**/*.entity{.js,.ts}'];
-
   return {
-    type: config[DBEnum.DB_TYPE],
-    host: config[DBEnum.DB_HOST],
-    port: config[DBEnum.DB_PORT],
-    username: config[DBEnum.DB_USERNAME],
-    password: config[DBEnum.DB_PASSWORD],
-    database: config[DBEnum.DB_DATABASE],
+    type: config[ConfigEnum.DB_TYPE],
+    host: config[ConfigEnum.DB_HOST],
+    port: config[ConfigEnum.DB_PORT],
+    username: config[ConfigEnum.DB_USERNAME],
+    password: config[ConfigEnum.DB_PASSWORD],
+    database: config[ConfigEnum.DB_DATABASE],
     entities: entitiesDir,
     synchronize: true,
   } as TypeOrmModuleOptions;

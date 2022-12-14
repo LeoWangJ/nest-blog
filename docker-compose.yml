@@ -7,6 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: aa1111
+      MYSQL_DATABASE: nest-blog
     ports:
       - 3307:3306
   adminer:

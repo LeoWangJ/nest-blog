@@ -3,10 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
-import { connection } from 'ormconfig';
+import { connection } from '../ormconfig';
+import { UserModule } from './user/user.module';
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
-
 @Global()
 @Module({
   imports: [
@@ -33,6 +33,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
       }),
     }),
     TypeOrmModule.forRoot(connection),
+    UserModule,
   ],
   controllers: [],
   providers: [Logger],

@@ -2,7 +2,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
-import { getServerConfig } from 'ormconfig';
+import { getServerConfig } from '../ormconfig';
 
 export const setupApp = (app: INestApplication) => {
   const config = getServerConfig();
