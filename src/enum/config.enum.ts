@@ -8,3 +8,8 @@ export enum ConfigEnum {
   DB_SYNC = 'DB_SYNC',
   SECRET = 'SECRET',
 }
+
+export enum LogEnum {
+  LOG_ON = 'LOG_ON',
+  LOG_LEVEL = 'LOG_LEVEL',
+}

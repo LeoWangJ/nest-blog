@@ -26,6 +26,8 @@ export function buildConnectionOptions() {
     process.env.NODE_ENV === 'test'
       ? [__dirname + '/**/*.entity.ts']
       : [__dirname + '/**/*.entity{.js,.ts}'];
+  const logFlag = config['LOG_ON'] === 'true';
+
   return {
     type: config[ConfigEnum.DB_TYPE],
     host: config[ConfigEnum.DB_HOST],
@@ -35,6 +37,7 @@ export function buildConnectionOptions() {
     database: config[ConfigEnum.DB_DATABASE],
     entities: entitiesDir,
     synchronize: true,
+    logging: logFlag && process.env.NODE_ENV === 'development',
   } as TypeOrmModuleOptions;
 }
 

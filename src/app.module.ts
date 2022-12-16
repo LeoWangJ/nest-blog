@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
 import { connection } from '../ormconfig';
 import { UserModule } from './user/user.module';
+import { LogsModule } from './logs/logs.module';
 
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 @Global()
@@ -34,6 +35,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
     }),
     TypeOrmModule.forRoot(connection),
     UserModule,
+    LogsModule,
   ],
   controllers: [],
   providers: [Logger],
