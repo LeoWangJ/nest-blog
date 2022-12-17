@@ -30,6 +30,7 @@ specifiers:
   nest-winston: ^1.8.0
   prettier: ^2.3.2
   reflect-metadata: ^0.1.13
+  request-ip: ^3.3.0
   rimraf: ^3.0.2
   rxjs: ^7.2.0
   source-map-support: ^0.5.20
@@ -58,6 +59,7 @@ dependencies:
   mysql2: 2.3.3
   nest-winston: 1.8.0_xlxfmi5fzr5alofp25xqzclqqq
   reflect-metadata: 0.1.13
+  request-ip: 3.3.0
   rimraf: 3.0.2
   rxjs: 7.6.0
   typeorm: 0.3.11_pa4ea3wjef6s4gsskhbyci3cte
@@ -4371,6 +4373,10 @@ packages:
     resolution: {integrity: sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg==}
     engines: {node: '>=8'}
     dev: true
+
+  /request-ip/3.3.0:
+    resolution: {integrity: sha512-cA6Xh6e0fDBBBwH77SLJaJPBmD3nWVAcF9/XAcsrIHdjhFzFiB5aNQFytdjCGPezU3ROwrR11IddKAM08vohxA==}
+    dev: false
 
   /require-directory/2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
