@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { QueryFailedError, TypeORMError } from 'typeorm';
+import { TypeORMError, QueryFailedError } from 'typeorm';
 
-@Catch()
+@Catch(TypeORMError)
 export class TypeormFilter implements ExceptionFilter {
   catch(exception: TypeORMError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -9,12 +9,12 @@ export class TypeormFilter implements ExceptionFilter {
     if (exception instanceof QueryFailedError) {
       code = exception.driverError.errno;
     }
-
     const response = ctx.getResponse();
-
     response.status(500).json({
-      code,
+      code: code,
       timestamp: new Date().toISOString(),
+      // path: request.url,
+      // method: request.method,
       message: exception.message,
     });
   }

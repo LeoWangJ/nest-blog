@@ -1,20 +1,27 @@
-import { NestFactory } from '@nestjs/core';
-import { getServerConfig } from '../ormconfig';
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+import { Logger } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module';
-import { setupApp } from './setup';
+import { AllExceptionFilter } from './filters/all-exception.filter';
 
 async function bootstrap() {
-  const config = getServerConfig();
   const app = await NestFactory.create(AppModule, {
-    logger: false,
-    cors: true,
+    // logger: false,
+    // logger: ['error', 'warn'],
   });
-  setupApp(app);
-  const port =
-    typeof config['APP_PORT'] === 'string'
-      ? parseInt(config['APP_PORT'])
-      : 3000;
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+  app.setGlobalPrefix('api/v1');
+
+  const httpAdapter = app.get(HttpAdapterHost);
+
+  const logger = new Logger();
+  // app.useGlobalFilters(new HttpExceptionFilter(logger));
+  app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
+
+  const port = 3000;
   await app.listen(port);
-  await app.init();
 }
 bootstrap();

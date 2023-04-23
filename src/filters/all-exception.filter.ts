@@ -1,21 +1,22 @@
 import {
-  ArgumentsHost,
-  Catch,
   ExceptionFilter,
+  HttpAdapterHost,
   HttpException,
   HttpStatus,
   LoggerService,
 } from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
+import { ArgumentsHost, Catch } from '@nestjs/common';
+
 import * as requestIp from 'request-ip';
+import { QueryFailedError } from 'typeorm';
 
 @Catch()
-export class AllExceptionFilter<T> implements ExceptionFilter {
+export class AllExceptionFilter implements ExceptionFilter {
   constructor(
     private readonly logger: LoggerService,
     private readonly httpAdapterHost: HttpAdapterHost,
   ) {}
-  catch(exception: T, host: ArgumentsHost) {
+  catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
     const request = ctx.getRequest();
@@ -26,8 +27,7 @@ export class AllExceptionFilter<T> implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const msg: unknown = exception['response'] || 'Internal Server Error';
-
+    const msg: string = exception['response'] || 'Internal Server Error';
     const responseBody = {
       headers: request.headers,
       query: request.query,
@@ -39,7 +39,7 @@ export class AllExceptionFilter<T> implements ExceptionFilter {
       error: msg,
     };
 
-    this.logger.error('[nest-blog]', responseBody);
+    this.logger.error('[error]', responseBody);
     httpAdapter.reply(response, responseBody, httpStatus);
   }
 }

@@ -1,9 +1,9 @@
+import { LoggerService } from '@nestjs/common';
 import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
   HttpException,
-  LoggerService,
 } from '@nestjs/common';
 
 @Catch(HttpException)
@@ -17,7 +17,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response.status(status).json({
       code: status,
       timestamp: new Date().toISOString(),
+      // path: request.url,
+      // method: request.method,
       message: exception.message || exception.name,
     });
+    // throw new Error('Method not implemented.');
   }
 }

@@ -1,13 +1,17 @@
-import { Global, Module, Logger } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Global, Logger, Module } from '@nestjs/common';
+import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import * as Joi from 'joi';
-import { connection } from '../ormconfig';
-import { UserModule } from './user/user.module';
-import { LogsModule } from './logs/logs.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
+import { LogsModule } from './logs/logs.module';
+import { RolesModule } from './roles/roles.module';
+
+import { connectionParams } from '../ormconfig';
+
+const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
+
 @Global()
 @Module({
   imports: [
@@ -17,7 +21,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
       load: [() => dotenv.config({ path: '.env' })],
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
-          .valid('development', 'production', 'test')
+          .valid('development', 'production')
           .default('development'),
         DB_PORT: Joi.number().default(3306),
         DB_HOST: Joi.alternatives().try(
@@ -33,9 +37,10 @@ const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
         LOG_LEVEL: Joi.string(),
       }),
     }),
-    TypeOrmModule.forRoot(connection),
+    TypeOrmModule.forRoot(connectionParams),
     UserModule,
     LogsModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [Logger],
