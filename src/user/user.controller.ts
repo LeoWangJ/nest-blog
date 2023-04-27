@@ -10,6 +10,8 @@ import {
   Param,
   Query,
   UseFilters,
+  Headers,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
@@ -61,13 +63,21 @@ export class UserController {
   }
 
   @Patch('/:id')
-  updateUser(@Body() dto: any, @Param('id') id: number): any {
-    const user = dto as User;
-    return this.userService.update(id, user);
+  updateUser(
+    @Body() dto: any,
+    @Param('id') id: number,
+    @Headers('Authorization') headers: any,
+  ): any {
+    if (id === headers) {
+      const user = dto as User;
+      return this.userService.update(id, user);
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 
   @Delete('/:id')
-  deleteUser(@Param('id') id: number): any {
+  removeUser(@Param('id') id: number): any {
     return this.userService.remove(id);
   }
 

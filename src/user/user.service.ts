@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { Logs } from '../logs/logs.entity';
 import { getUserDto } from './dto/get-user.dto';
 import { conditionUtils } from '../utils/db.helper';
+import { Roles } from 'src/roles/roles.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Logs) private readonly logsRepository: Repository<Logs>,
+    @InjectRepository(Roles)
+    private readonly rolesRepository: Repository<Roles>,
   ) {}
 
   findAll(query: getUserDto) {
@@ -84,6 +87,13 @@ export class UserService {
   }
 
   async create(user: User) {
+    if (user.roles instanceof Array && typeof user.roles[0] === 'number') {
+      user.roles = await this.rolesRepository.find({
+        where: {
+          id: In(user.roles),
+        },
+      });
+    }
     const userTmp = await this.userRepository.create(user);
     // try {
     const res = await this.userRepository.save(userTmp);
@@ -100,11 +110,14 @@ export class UserService {
   }
 
   async update(id: number, user: Partial<User>) {
-    return this.userRepository.update(id, user);
+    const userTmp = await this.findProfile(id);
+    const newUser = this.userRepository.merge(userTmp, user);
+    return this.userRepository.save(newUser);
   }
 
-  remove(id: number) {
-    return this.userRepository.delete(id);
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    return this.userRepository.remove(user);
   }
 
   findProfile(id: number) {
@@ -122,7 +135,7 @@ export class UserService {
     const user = await this.findOne(id);
     return this.logsRepository.find({
       where: {
-        user,
+        user: user.logs,
       },
       // relations: {
       //   user: true,
