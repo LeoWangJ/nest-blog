@@ -1,7 +1,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module';
@@ -20,7 +20,7 @@ async function bootstrap() {
   const logger = new Logger();
   // app.useGlobalFilters(new HttpExceptionFilter(logger));
   app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
-
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const port = 3000;
   await app.listen(port);
 }

@@ -12,16 +12,22 @@ import {
   UseFilters,
   Headers,
   UnauthorizedException,
+  UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { getUserDto } from './dto/get-user.dto';
-import { TypeormFilter } from '../filters/typeorm.filter';
+import { TypeOrmDecorator } from 'src/utils';
+import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserPipe } from './pipes/create-user.pipe';
+import { AuthGuard } from '@nestjs/passport';
+import { AdminGuard } from 'src/guards/admin/admin.guard';
 
 @Controller('user')
-@UseFilters(new TypeormFilter())
+@TypeOrmDecorator()
 export class UserController {
   // private logger = new Logger(UserController.name);
 
@@ -35,7 +41,8 @@ export class UserController {
   }
 
   @Get('/profile')
-  getUserProfile(@Query('id') id: any): any {
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  getUserProfile(@Query('id', ParseIntPipe) id: any): any {
     return this.userService.findProfile(id);
   }
 
@@ -49,7 +56,7 @@ export class UserController {
   }
 
   @Post()
-  addUser(@Body() dto: any): any {
+  addUser(@Body(CreateUserPipe) dto: CreateUserDto): any {
     const user = dto as User;
     // user -> dto.username
     // return this.userService.addUser();
