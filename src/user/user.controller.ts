@@ -23,8 +23,8 @@ import { getUserDto } from './dto/get-user.dto';
 import { TypeOrmDecorator } from 'src/utils';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CreateUserPipe } from './pipes/create-user.pipe';
-import { AuthGuard } from '@nestjs/passport';
-import { AdminGuard } from 'src/guards/admin/admin.guard';
+import { AdminGuard } from 'src/guards/admin.guard';
+import { JwtGuard } from 'src/guards/jwt.guard';
 
 @Controller('user')
 @TypeOrmDecorator()
@@ -41,7 +41,7 @@ export class UserController {
   }
 
   @Get('/profile')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(JwtGuard, AdminGuard)
   getUserProfile(@Query('id', ParseIntPipe) id: any): any {
     return this.userService.findProfile(id);
   }

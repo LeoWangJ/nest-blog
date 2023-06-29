@@ -15,11 +15,11 @@ async function bootstrap() {
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   app.setGlobalPrefix('api/v1');
 
-  const httpAdapter = app.get(HttpAdapterHost);
+  // const httpAdapter = app.get(HttpAdapterHost);
 
-  const logger = new Logger();
-  // app.useGlobalFilters(new HttpExceptionFilter(logger));
-  app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
+  // const logger = new Logger();
+  // // app.useGlobalFilters(new HttpExceptionFilter(logger));
+  // app.useGlobalFilters(new AllExceptionFilter(logger, httpAdapter));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const port = 3000;
   await app.listen(port);
