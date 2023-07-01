@@ -36,13 +36,13 @@ export class User {
   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
   profile: Profile;
 
-  @AfterInsert()
-  afterInsert() {
-    console.log('afterInsert');
-  }
+  // @AfterInsert()
+  // afterInsert() {
+  //   console.log('afterInsert');
+  // }
 
-  @AfterRemove()
-  afterRemove() {
-    console.log('afterRemove');
-  }
+  // @AfterRemove()
+  // afterRemove() {
+  //   console.log('afterRemove');
+  // }
 }

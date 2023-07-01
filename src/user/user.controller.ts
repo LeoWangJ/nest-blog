@@ -9,7 +9,6 @@ import {
   Body,
   Param,
   Query,
-  UseFilters,
   Headers,
   UnauthorizedException,
   UseGuards,
@@ -25,6 +24,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { CreateUserPipe } from './pipes/create-user.pipe';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { JwtGuard } from 'src/guards/jwt.guard';
+import { Serialize } from 'src/decorators/serialize.decorator';
+import { PublicUserDto } from './dto/public-user.dto';
 
 @Controller('user')
 @TypeOrmDecorator()
@@ -47,6 +48,7 @@ export class UserController {
   }
 
   @Get()
+  @Serialize(PublicUserDto)
   getUsers(@Query() query: getUserDto): any {
     console.log(
       '🚀 ~ file: user.controller.ts ~ line 46 ~ UserController ~ getUsers ~ query',
