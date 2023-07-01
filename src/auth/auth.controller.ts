@@ -1,13 +1,16 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   HttpException,
   Post,
   UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { TypeOrmDecorator } from 'src/utils';
 import { SigninUserDto } from './dto/signin-user.dto';
+import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 @Controller('auth')
 @TypeOrmDecorator()
 export class AuthController {
@@ -18,6 +21,7 @@ export class AuthController {
     return this.AuthService.signin(username, password);
   }
   @Post('/signup')
+  @UseInterceptors(ClassSerializerInterceptor)
   signup(@Body() dto: SigninUserDto) {
     const { username, password } = dto;
     if (!username || !password) {
