@@ -10,6 +10,7 @@ import { LogsModule } from './logs/logs.module';
 import { connectionParams } from '../ormconfig';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
+import { MenusModule } from './menus/menus.module';
 
 const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
 
@@ -33,7 +34,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
         DB_DATABASE: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
-        DB_SYNC: Joi.boolean().default(true),
+        DB_SYNC: Joi.boolean().default(false),
         LOG_ON: Joi.boolean(),
         LOG_LEVEL: Joi.string(),
       }),
@@ -43,6 +44,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
     LogsModule,
     RolesModule,
     AuthModule,
+    MenusModule,
   ],
   controllers: [],
   providers: [Logger],
