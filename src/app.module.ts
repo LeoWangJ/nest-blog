@@ -6,10 +6,10 @@ import * as Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { LogsModule } from './logs/logs.module';
-import { RolesModule } from './roles/roles.module';
 
 import { connectionParams } from '../ormconfig';
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
 
 const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
 
@@ -33,7 +33,7 @@ const envFilePath = `.env.${process.env.NODE_ENV || `development`}`;
         DB_DATABASE: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
-        DB_SYNC: Joi.boolean().default(false),
+        DB_SYNC: Joi.boolean().default(true),
         LOG_ON: Joi.boolean(),
         LOG_LEVEL: Joi.string(),
       }),
